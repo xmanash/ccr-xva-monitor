@@ -1,0 +1,53 @@
+[project]
+name = "ccr-xva-monitor"
+version = "0.1.0"
+description = "Local-first counterparty credit risk and XVA assistant. Engines compute every number; the agent explains and cites them."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "CCR-XVA Monitor contributors" }]
+dependencies = [
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "QuantLib>=1.34",
+    "sqlalchemy>=2.0",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "python-multipart>=0.0.9",
+    "langgraph>=0.2.40",
+    "langchain-core>=0.3",
+    "chromadb>=0.5.5",
+    "rank-bm25>=0.2.2",
+    "streamlit>=1.39",
+    "plotly>=5.24",
+    "pyyaml>=6.0",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+eval = ["ragas>=0.2.0"]
+obs = ["langfuse>=2.50"]
+adk = ["google-adk>=1.15"]
+pinecone = ["pinecone>=10.1"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+ccr-api = "ccr_xva.api.main:run"
+ccr-ui = "ccr_xva.ui.app:run"
+ccr-mcp = "ccr_xva.mcp.server:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = [
+    "slow: high-path accuracy benchmarks",
+]
