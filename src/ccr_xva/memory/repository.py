@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from ccr_xva.memory.db import (
     CSARow,
@@ -224,9 +224,8 @@ class Repository:
             stmt = select(EpisodeRow)
             if counterparty_id is not None:
                 stmt = stmt.where(EpisodeRow.counterparty_id == counterparty_id)
-            rows = session.scalars(stmt).all()
-            episodes = [MemoryEpisode.model_validate_json(row.payload) for row in rows]
-            return sorted(episodes, key=lambda item: (item.as_of, item.id))
+            rows = session.scalars(stmt.order_by(text("rowid"))).all()
+            return [MemoryEpisode.model_validate_json(row.payload) for row in rows]
 
     def add_message(self, session_id: str, role: str, content: str) -> None:
         with self._session() as session:
