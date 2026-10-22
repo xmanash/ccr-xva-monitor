@@ -246,7 +246,7 @@ elif page == "XVA what-if":
 
 elif page == "Check":
     st.subheader("Desk check")
-    st.caption("Confirms a live calculation, stored memory, and the local evaluation. Open this page from the public address.")
+    st.caption("Confirms a live calculation, then recalls it from a new session, and runs the evaluation.")
     if st.button("Run checks", type="primary"):
         try:
             core = _post(
@@ -263,7 +263,7 @@ elif page == "Check":
                 "/query",
                 {
                     "query": "Recall the last calculation for ABC Bank",
-                    "session_id": "public-check",
+                    "session_id": "fresh-session",
                     "include_charts": False,
                     "as_of": "2026-10-05",
                     "n_paths": 20,

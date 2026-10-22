@@ -11,6 +11,7 @@ COPY scripts ./scripts
 COPY docs ./docs
 RUN pip install --no-cache-dir .
 
+COPY .streamlit ./.streamlit
 COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 

@@ -1,0 +1,15 @@
+{
+  "name": "CCR-XVA Monitor",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "forwardPorts": [8501],
+  "portsAttributes": {
+    "8501": {
+      "label": "CCR-XVA desk",
+      "onAutoForward": "ignore",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "pip install --upgrade pip && pip install -e .",
+  "postStartCommand": "bash .devcontainer/start.sh",
+  "customizations": {}
+}
