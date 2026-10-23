@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from ccr_xva.agents.graph import run_query
+from ccr_xva.evals.failures import failure_report
 from ccr_xva.evals.suite import run_suite
 from ccr_xva.guardrails.csa_parser import parse_csa_text
 from ccr_xva.memory.repository import get_repository
@@ -183,8 +184,10 @@ def trace(calculation_id: str, service: RiskService = Depends(get_service)) -> d
 
 
 @router.post("/eval/run")
-def eval_run() -> dict:
-    return run_suite()
+def eval_run(service: RiskService = Depends(get_service)) -> dict:
+    report = run_suite()
+    report["failure_set"] = failure_report(service)
+    return report
 
 
 def _threshold_override(service: RiskService, body: CalculateRequest) -> CSA | None:

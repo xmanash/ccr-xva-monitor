@@ -1,0 +1,102 @@
+{
+  "cases": [
+    {
+      "query": "What is the collateral threshold in the methodology?",
+      "expected_route": "rag",
+      "expected_owner": "methodology",
+      "route": "what_if",
+      "owner": "xva",
+      "category": "definitional",
+      "misrouted": true
+    },
+    {
+      "query": "Define the recovery rate assumption.",
+      "expected_route": "rag",
+      "expected_owner": "methodology",
+      "route": "what_if",
+      "owner": "xva",
+      "category": "definitional",
+      "misrouted": true
+    },
+    {
+      "query": "Compare the unilateral CVA and DVA formulas in the methodology.",
+      "expected_route": "rag",
+      "expected_owner": "methodology",
+      "route": "compare",
+      "owner": "memory",
+      "category": "definitional",
+      "misrouted": true
+    },
+    {
+      "query": "What is the unilateral CVA formula?",
+      "expected_route": "rag",
+      "expected_owner": "methodology",
+      "route": "rag",
+      "owner": "methodology",
+      "category": "definitional",
+      "misrouted": false
+    },
+    {
+      "query": "What is the current peak PFE for ABC Bank?",
+      "expected_route": "exposure",
+      "expected_owner": "exposure",
+      "route": "exposure",
+      "owner": "exposure",
+      "category": "book_number",
+      "misrouted": false
+    },
+    {
+      "query": "What happens to CVA if we increase the collateral threshold?",
+      "expected_route": "what_if",
+      "expected_owner": "xva",
+      "route": "what_if",
+      "owner": "xva",
+      "category": "shock",
+      "misrouted": false
+    },
+    {
+      "query": "What if we decrease the recovery rate, what is the new CVA?",
+      "expected_route": "what_if",
+      "expected_owner": "xva",
+      "route": "what_if",
+      "owner": "xva",
+      "category": "shock",
+      "misrouted": false
+    },
+    {
+      "query": "Recall the last calculation for ABC Bank",
+      "expected_route": "memory",
+      "expected_owner": "memory",
+      "route": "memory",
+      "owner": "memory",
+      "category": "snapshot",
+      "misrouted": false
+    }
+  ],
+  "misroute_count": 3,
+  "handoff_accuracy": 0.625,
+  "false_refusal_count": 1,
+  "snapshot_drift_count": 1,
+  "taxonomy": [
+    {
+      "name": "wrong_specialist_handoff",
+      "label": "Wrong specialist handoff",
+      "status": "scored"
+    },
+    {
+      "name": "false_policy_refusal",
+      "label": "False policy refusal",
+      "status": "open"
+    },
+    {
+      "name": "ungrounded_number_withheld",
+      "label": "Ungrounded number withheld",
+      "status": "covered"
+    },
+    {
+      "name": "resimulated_snapshot_drift",
+      "label": "Resimulated snapshot drift",
+      "status": "open"
+    }
+  ]
+}

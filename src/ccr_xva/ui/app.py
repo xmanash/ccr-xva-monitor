@@ -55,6 +55,13 @@ def _chart(chart: dict | None) -> None:
     st.plotly_chart(figure, use_container_width=True)
 
 
+def _fmt_rate(value: float) -> str:
+    text = f"{value:.3f}".rstrip("0").rstrip(".")
+    if "." not in text:
+        text += ".0"
+    return text
+
+
 def _header() -> str:
     if "page" not in st.session_state:
         st.session_state.page = PAGES[0][0]
@@ -280,6 +287,42 @@ elif page == "Check":
             core_col.metric("Core calculation", "Pass" if core_ok else "Fail")
             memory_col.metric("Memory", "Pass" if memory_ok else "Fail")
             eval_col.metric("Evaluation", "Pass" if eval_ok else "Fail")
+            failure = report.get("failure_set") or {}
+            accuracy = failure.get("handoff_accuracy")
+            baseline_accuracy = failure.get("baseline_handoff_accuracy")
+            misroute_count = failure.get("misroute_count")
+            baseline_misroutes = failure.get("baseline_misroute_count")
+            handoff_col, misroute_col = st.columns(2)
+            if accuracy is not None and baseline_accuracy is not None:
+                handoff_col.metric("Handoff accuracy", _fmt_rate(accuracy), delta=round(accuracy - baseline_accuracy, 3))
+            if misroute_count is not None and baseline_misroutes is not None:
+                misroute_col.metric(
+                    "Misroutes",
+                    misroute_count,
+                    delta=misroute_count - baseline_misroutes,
+                    delta_color="inverse",
+                )
+            cases = failure.get("cases") or []
+            if cases:
+                st.dataframe(
+                    pd.DataFrame(
+                        [
+                            {
+                                "Question": case["query"],
+                                "Expected owner": case["expected_owner"],
+                                "Actual owner": case["owner"],
+                                "Category": case["category"],
+                            }
+                            for case in cases
+                        ]
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
+            st.caption("Open issues. These counts are not a pass or a fail.")
+            false_col, drift_col = st.columns(2)
+            false_col.metric("False refusals", failure.get("false_refusal_count", 0))
+            drift_col.metric("Snapshot drift", failure.get("snapshot_drift_count", 0))
             st.markdown(core.get("answer", ""))
             st.markdown(memory.get("answer", ""))
             with st.expander("Evaluation detail"):

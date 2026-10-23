@@ -41,6 +41,11 @@ def plan_query(query: str, service: RiskService, session_id: str, netting_set_id
         return {"route": "top_pfe" if exposure and not credit else "top_credit", "params": params}
     if is_market_query(query):
         return {"route": "market", "params": params}
+    definitional = bool(re.search(r"\b(what is|define|formula|methodology)\b", text))
+    wants_book_number = bool(re.search(r"\b(current|peak|show|calculate|compute|counterparty|netting)\b", text))
+    explicit_shock = bool(re.search(r"\b(what if|what-if|what happens|increase|decrease)\b", text))
+    if definitional and not wants_book_number and not explicit_shock:
+        return {"route": "rag", "params": params}
     if any(word in text for word in ("last week", "compare", "versus yesterday", "vs last")):
         return {"route": "compare", "params": params}
     if any(word in text for word in ("what if", "what-if", "what happens", "increase collateral", "threshold", "recovery rate")) and any(
@@ -50,10 +55,6 @@ def plan_query(query: str, service: RiskService, session_id: str, netting_set_id
         return {"route": "what_if", "params": params}
     if any(word in text for word in ("sensitiv", "volatility")) and "cva" in text:
         return {"route": "sensitivity", "params": params}
-    definitional = bool(re.search(r"\b(what is|define|formula|methodology)\b", text))
-    wants_book_number = bool(re.search(r"\b(current|peak|show|calculate|compute|counterparty|netting)\b", text))
-    if definitional and not wants_book_number:
-        return {"route": "rag", "params": params}
     if any(word in text for word in ("chart", "graph", "trend", "plot")):
         return {"route": "trends", "params": params}
     if any(phrase in text for phrase in ("csa", "collateral agreement", "margin terms")):

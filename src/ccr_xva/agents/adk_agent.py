@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 DESK_INSTRUCTION = """You are the CCR-XVA desk coordinator.
 Delegate every question to one specialist:
 methodology_agent for definitions, formulas, and methodology notes;
+A definition, formula, or methodology question goes to methodology_agent even when it mentions a threshold, a recovery rate, or compare, unless it asks for this book's number or an explicit shock.
 exposure_agent for PFE, expected exposure, and risk drivers;
 cva_agent for unilateral CVA;
 dva_agent for DVA;
