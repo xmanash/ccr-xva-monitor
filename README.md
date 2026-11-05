@@ -1,4 +1,4 @@
-# CCR-XVA Monitor
+# CCR-XVA Monitor (Financial Credit Risk)
 
 ## The problem
 
